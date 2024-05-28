@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/Lectrozzz/teahouse-backend/internal/auth"
 	"github.com/Lectrozzz/teahouse-backend/internal/drink"
+	"github.com/Lectrozzz/teahouse-backend/internal/order"
 	"github.com/Lectrozzz/teahouse-backend/internal/user"
 	"github.com/gofiber/fiber/v2"
 )
@@ -16,12 +17,11 @@ func InitServer(){
 	// User Profile
 	app.Route("/user", user.UserRouter)
 
-	// Menu
-	menuGroup := app.Group("/menu")
-	menuGroup.Route("/drink", drink.DrinkRouter)
+	// Drink Menu
+	app.Route("/drink", drink.DrinkRouter)
 
 	// Order
-	// app.Route("/order", router.UserRouter)
+	app.Route("/order", order.OrderRouter)
 
 	app.Listen(":8080")
 }

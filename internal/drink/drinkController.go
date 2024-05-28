@@ -43,7 +43,7 @@ func GetSingleDrinkHandler(c *fiber.Ctx) error{
 	if err := database.DrinksCollection.FindOne(context.TODO(), filter).Decode(&result); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"success": false, "error": err.Error()})
 	}
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{"success": true, "body": result})
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"success": true, "data": result})
 }
 
 func CreateDrinkHandler(c *fiber.Ctx) error {
@@ -66,8 +66,10 @@ func UpdateDrinkHandler(c *fiber.Ctx) error {
 }
 
 func DeleteDrinkHandler(c *fiber.Ctx) error{
+	// TODO
 	var id = c.Params("id")
-	filter := bson.D{{Key: "_id", Value: id}}
+	objectID, _ := primitive.ObjectIDFromHex(id)
+	filter := bson.D{{Key: "_id", Value: objectID}}
 
 	result := database.DrinksCollection.FindOneAndDelete(context.TODO(), filter)
 

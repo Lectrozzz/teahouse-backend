@@ -20,6 +20,12 @@ func RegisterHandler(c *fiber.Ctx) error {
 	if err:=c.BodyParser(&newUser); err!=nil{
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"success": false,"error":err.Error()})
 	}
+
+	filter := bson.D{{Key: "phone-number", Value:newUser.PhoneNumber}}
+	if err := database.UsersCollection.FindOne(context.TODO(), filter).Decode(&newUser); err == nil{
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"success": false,"error":"Phone number has been registered"})
+	}
+
 	newPassword, err := utils.HashPassword(newUser.Password); 
 	if err!= nil{
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"success": false,"error":err.Error()})
@@ -50,6 +56,7 @@ func LoginHandler(c *fiber.Ctx) error {
 	}
 
 	claims := jwt.MapClaims{
+		"id": userData.ID.Hex(),
 		"email": userData.Email,
 		"role": userData.Role,
 		"exp": time.Now().Add(time.Hour * 72).Unix(),

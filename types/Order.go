@@ -7,7 +7,7 @@ type Status string
 const (
 	Pending    Status = "Pending"
 	Processing Status = "Processing"
-	Completed  Status = "Completed"
+	Ready  Status = "Ready"
 	Rejected   Status = "Rejected"
 )
 
@@ -18,9 +18,11 @@ type Item struct {
 }
 
 type Order struct {
-	ID       primitive.ObjectID `bson:"_id"`
+	ID       primitive.ObjectID `bson:"_id,omitempty"`
+	UserID   primitive.ObjectID `bson:"userid"`
 	ItemList []Item             `bson:"itemlist"`
 	Date     primitive.DateTime `bson:"date"`
 	Status   Status             `bson:"status"`
 	Price    int                `bson:"price"`
+	Voucher  string             `bson:"voucher"`
 }
