@@ -16,5 +16,5 @@ type User struct{
 	Password string `bson:"password,omitempty"`
 	PhoneNumber string `bson:"phone-number,omitempty"`
 	Role Role `bson:"role,omitempty"`
-	Point int `bson:"point"`
+	Points int `bson:"points"`
 }
